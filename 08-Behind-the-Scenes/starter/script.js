@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 function calcAge(birthYear) {
   const age = 2037 - birthYear;
 
@@ -158,3 +158,48 @@ var addArrow1 = (a, b) => {
   return a + b;
 };
 addArrow1(2, 5, 8); // ReferenceError: arguments is not defined
+*/
+
+const jessica1 = {
+  firstName: 'Jessica',
+  lastName: 'Williams',
+  age: 27,
+};
+
+function marryPerson(originalPerson, newLastName) {
+  originalPerson.lastName = newLastName;
+  return originalPerson;
+}
+
+const marriedJessica = marryPerson(jessica1, 'Davis');
+
+// const marriedJessica = jessica;
+// marriedJessica.lastName = 'Davis';
+
+console.log('Before', jessica1);
+console.log('After:', marriedJessica);
+
+const jessica2 = {
+  firstName: 'Jessica',
+  lastName: 'Williams',
+  age: 27,
+  family: ['Alice', 'Bob'],
+};
+
+// Shallow copy
+const jessicaCopy = { ...jessica2 };
+jessicaCopy.lastName = 'Davis';
+
+// jessicaCopy.family.push('Mary');
+// jessicaCopy.family.push('John');
+
+// console.log('Before', jessica2);
+// console.log('After:', jessicaCopy);
+
+// Deep copy / Deep clone
+const jessicaClone = structuredClone(jessica2);
+jessicaClone.family.push('Mary');
+jessicaClone.family.push('John');
+
+console.log('original:', jessica2);
+console.log('Clone:', jessicaClone);
