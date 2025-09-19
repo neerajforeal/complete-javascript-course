@@ -10,6 +10,7 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  type: 'premium',
 };
 
 const account2 = {
@@ -17,6 +18,7 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+  type: 'standard',
 };
 
 const account3 = {
@@ -24,6 +26,7 @@ const account3 = {
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
+  type: 'premium',
 };
 
 const account4 = {
@@ -31,6 +34,7 @@ const account4 = {
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
+  type: 'basic',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -61,10 +65,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
 
-  movements.forEach((mov, i) => {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -218,6 +224,16 @@ btnClose.addEventListener('click', e => {
 
   inputLoginUsername.value = inputLoginPin.value = '';
 });
+
+let sorted = false;
+btnSort.addEventListener(
+  ('click',
+  e => {
+    e.preventDefault();
+    displayMovements(currentAccount.movements, !sorted);
+    sorted = !sorted;
+  })
+);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -628,3 +644,106 @@ const heaviestFetchBreed = Math.max(...fetchWeights);
 console.log(fetchWeights);
 console.log(heaviestFetchBreed);
 */
+
+/*
+////////////////////////
+/////// Sort() ////////
+
+// Strings
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+
+// Numbers
+console.log(movements);
+// console.log(movements.sort());
+
+// return < 0 (A, B) keep order
+// return > 0 (B, A) switch order
+
+// Ascending
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (b > a) return -1;
+// });
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Descending
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (b > a) return 1;
+// });
+movements.sort((a, b) => b - a);
+console.log(movements);
+*/
+
+/*
+//////////////////////////////////
+//////// Array Grouping /////////
+
+console.log(movements);
+
+const groupedMovements = Object.groupBy(movements, movement =>
+  movement > 0 ? 'deposits' : 'withdrawals'
+);
+console.log(groupedMovements);
+
+const groupedByActivity = Object.groupBy(accounts, account => {
+  const movementCount = account.movements.length;
+
+  if (movementCount >= 8) return 'very active';
+  if (movementCount >= 4) return 'active';
+  if (movementCount >= 1) return 'moderate';
+  return 'inactive';
+});
+console.log(groupedByActivity);
+
+// With objects
+// const groupedAccounts = Object.groupBy(accounts, account => account.type);
+const groupedAccounts = Object.groupBy(accounts, ({ type }) => type);
+console.log(groupedAccounts);
+*/
+
+//////////////////////////////////////
+////// fill() and Array.from() //////
+const arr = [1, 2, 3, 4, 5, 6, 7];
+
+// Empty arrays + fill method
+const x = new Array(7);
+console.log(x);
+// console.log(x.map(()=>5))
+
+// x.fill(1)
+x.fill(1, 3, 5);
+console.log(x);
+
+arr.fill(23, 2, 6);
+
+// Array.from
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log(z);
+
+labelBalance.addEventListener('click', () => {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('E', ''))
+  );
+  console.log(movementsUI);
+});
+
+///////////////////////////////////////////
+// Non-Destructive Alternatives: toReversed(), toSorted(), toSpliced() and with()
+
+console.log(movements);
+const reversedMov = movements.toReversed();
+console.log(reversedMov);
+
+// with()
+// movements[1] = 2000;
+const newMovements = movements.with(1, 2000);
+console.log(newMovements);
+
+console.log(movements);
